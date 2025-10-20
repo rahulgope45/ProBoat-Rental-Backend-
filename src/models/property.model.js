@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./user.model";
 
 //Property schema
 
@@ -7,20 +8,18 @@ const propertySchema = new mongoose.Schema(
         category: {
             //Flat or Land or rental
             type: String,
-            enum: ["Flat", "Land" , "Rental" ],
+            enum: ["Flat", "Land", "Rental"],
             required: true,
 
         },
 
         sellerName: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: User,
             required: true,
         },
 
-        sellerNumber: {
-            type: String,
-            required: true,
-        },
+
 
         location: {
             country: { type: String, required: true },
@@ -34,25 +33,35 @@ const propertySchema = new mongoose.Schema(
             },
         },
 
-        images: {
-            type: Array,
-            required: true,
-        },
+        images: [
+            {
+                type: Array,
+                required: true,
+            },
+        ],
 
         price: {
-            type: String,
+            type: Number,
             required: true,
         },
 
         ratings: {
-            type: String,
+            average: { type: Number, default: 0 },
+            totalReviews: { type: Number, default: 0 },
             required: true,
         },
 
         description: {
             type: String,
             required: true,
-        }
+            maxlength: 200,
+        },
+
+        status: {
+            type: String,
+            enum: ["Available", "Rented", "Sold"],
+            default: "Available",
+        },
 
 
 
