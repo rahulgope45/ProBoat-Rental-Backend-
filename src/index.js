@@ -3,10 +3,17 @@ import dotenv from 'dotenv';
 import { connectDB } from './lib/db.js';
 import cookieParser from 'cookie-parser';
 import authRoutes from "./routes/auth.route.js"
+import cors from 'cors';
 
 
 dotenv.config();
 const app = express();
+
+//Frontend
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 
 //Middleware
 
@@ -16,10 +23,11 @@ app.use(cookieParser());
 const PORT = process.env.PORT;
 
 
-//Test Route
+//Test Route 
 app.get("/", (req, res) => {
     res.send("Backend is running..");
 })
+
 
 
 //Making Auth
