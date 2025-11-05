@@ -38,9 +38,11 @@ export const signup = async (req,res)=>{
             await newUser.save();
 
             res.status(201).json({
-                _id:newUser._id,
+                user: {
+                    _id:newUser._id,
                 fullName: newUser.fullName,
                 email: newUser.email,
+                }
             })
 
         }
@@ -98,7 +100,10 @@ export const logout = async (req,res)=>{
 
 export const checkAuth = async (req,res)=>{
     try {
-        res.status(200).json(req.user);
+        res.status(200).json({
+            user: req.user
+        });
+        
 
     } catch (error) {
     console.log("error in Auth check controller", error.message);

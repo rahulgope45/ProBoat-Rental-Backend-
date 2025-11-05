@@ -11,10 +11,12 @@ export const protectRoute = async (req,res,next)=>{
         if(!decoded){
             return res.status(401).json({message: "Unauthorized -No Token Provided"})
         }
-        const user = User.findById(decoded.userId).select("-password")
+        const user = await User.findById(decoded.userId).select("-password")
         if(!user){
             return res.status(401).json({message: "Unauthorized -No Token Provided"}) 
         }
+        req.user = user;
+        next()
       } catch (error) {
         console.log("Error in protectRoute middleware", error.message)
          return res.status(500).json({message: "Internal server error"})
