@@ -155,8 +155,33 @@ export const getAllProperties = async (req, res) => {
 //Get Property by id
 export const getPropertyById = async (req, res) => {
     try {
+        const { id } = req.params;
+
+        const property = await Property.findById(id)
+            .populate('owner.userId', 'fullName email');
+
+        if (!property) {
+            return res.status(404).json({
+                success: false,
+                message: 'Property not found'
+            });
+        }
+
+        //increment views
+        property.views += 1
+        await property.save()
+
+        res.status(200).json({
+            success: false,
+            property
+        })
 
     } catch (error) {
+        console.log('Error in getPropertyById:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
 
     }
 }
