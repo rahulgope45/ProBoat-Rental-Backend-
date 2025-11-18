@@ -189,9 +189,52 @@ export const getPropertyById = async (req, res) => {
 //Update Property
 export const updateProperty = async (req, res) => {
     try {
+        const {id} = req.params;
+
+        const property = await Property.findById(id);
+
+        if(!property){
+            return res.status(404).json({
+                success: false,
+                message: 'Property not found'
+            })
+        }
+
+        //if not owner
+        if(property.owner.userId.toString() !== req.user._id.toString()){
+            return res.status(403).json({
+                success: false,
+                message: 'Not Authorized to update this property'
+            });
+        }
+
+        //If updating images ,delete old ones from cloudinary
+        if(req.body.images && req.body.imagesToDelete){
+            const deletePromises = req.body.imagesToDelete.map(publicId => 
+                cloudinary.uploader.destroy(publicId)
+            );
+            await Promise.all(deletePromises);
+        }
+
+        const updatedProperty = await Property.findByIdAndUpdate(
+            id,
+            {...req.body},
+            {new: true, runValidators: true}
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'property updated successfully',
+            property: updateProperty
+        });
 
     } catch (error) {
 
+        console.log('Error in Updating Property', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server erorr'
+        });
     }
 }
 
