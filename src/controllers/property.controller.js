@@ -189,11 +189,11 @@ export const getPropertyById = async (req, res) => {
 //Update Property
 export const updateProperty = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
 
         const property = await Property.findById(id);
 
-        if(!property){
+        if (!property) {
             return res.status(404).json({
                 success: false,
                 message: 'Property not found'
@@ -201,7 +201,7 @@ export const updateProperty = async (req, res) => {
         }
 
         //if not owner
-        if(property.owner.userId.toString() !== req.user._id.toString()){
+        if (property.owner.userId.toString() !== req.user._id.toString()) {
             return res.status(403).json({
                 success: false,
                 message: 'Not Authorized to update this property'
@@ -209,8 +209,8 @@ export const updateProperty = async (req, res) => {
         }
 
         //If updating images ,delete old ones from cloudinary
-        if(req.body.images && req.body.imagesToDelete){
-            const deletePromises = req.body.imagesToDelete.map(publicId => 
+        if (req.body.images && req.body.imagesToDelete) {
+            const deletePromises = req.body.imagesToDelete.map(publicId =>
                 cloudinary.uploader.destroy(publicId)
             );
             await Promise.all(deletePromises);
@@ -218,8 +218,8 @@ export const updateProperty = async (req, res) => {
 
         const updatedProperty = await Property.findByIdAndUpdate(
             id,
-            {...req.body},
-            {new: true, runValidators: true}
+            { ...req.body },
+            { new: true, runValidators: true }
         );
 
         res.status(200).json({
@@ -241,8 +241,46 @@ export const updateProperty = async (req, res) => {
 //Delete Property
 export const deleteProperty = async (req, res) => {
     try {
+        const { id } = req.params;
+        const property = await Property.findById(id);
+
+        if (!property) {
+            return res.status(404).json({
+                success: false,
+                message: 'Property not found'
+            })
+        }
+
+        //check ownership
+        if (property.owner.userId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: 'Not authorized to delete this property'
+            })
+        }
+
+        //deleting the property from cloudinary
+        const deletePromises = property.images.map(img =>
+            cloudinary.uploader.destroy(img.publicId)
+        );
+        await Promise.all(deletePromises);
+
+        //delete Property
+        await Review.deleteMany({
+            property: id
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Property deleted successfully'
+        });
 
     } catch (error) {
+        console.log('Error in deleteProperty:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
 
     }
 }
