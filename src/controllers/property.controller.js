@@ -5,9 +5,9 @@ import cloudinary from "../lib/cloudinary.js";
 
 //Controller of Listing property
 
-export const createProperty = async (req, res) =>{
+export const createProperty = async (req, res) => {
     try {
-        const{
+        const {
             title,
             description,
             propertyType,
@@ -23,14 +23,14 @@ export const createProperty = async (req, res) =>{
         } = req.body;
 
         //Validation
-        if(!title || !description || !propertyType || !listingType || !price ){
+        if (!title || !description || !propertyType || !listingType || !price) {
             return res.status(400).json({
                 success: false,
                 message: 'Please provide all the required fields'
 
             });
         }
-        if(!images || images.length === 0){
+        if (!images || images.length === 0) {
             return res.status(400).json({
                 success: false,
                 message: 'Please uplaod at least one image'
@@ -45,11 +45,11 @@ export const createProperty = async (req, res) =>{
             propertyType,
             listingType,
             price,
-            address,location,
+            address, location,
             specifications,
             amenities,
             images,
-            owner:{
+            owner: {
                 userId: req.user._id,
                 name: owner?.name || req.user.fullName,
                 phone: owner?.phone,
@@ -72,51 +72,118 @@ export const createProperty = async (req, res) =>{
             success: 'false',
             message: 'Internal server error'
         })
-        
+
     }
 }
 
 //controller for get all properties
-export const getAllProperties =async (req,res) => {
+export const getAllProperties = async (req, res) => {
     try {
-        
+        const {
+            page = 1,
+            limit = 12,
+            propertyType,
+            listingType,
+            city,
+            state,
+            minPrice,
+            maxPrice,
+            bedrooms,
+            bathrooms,
+            furnished,
+            sortBy = 'createdAt',
+            order = 'desc',
+            search
+        } = req.query;
+
+
+        //Query
+        if (propertyType) query.propertyType = propertyType;
+
+        if (listingType) query.listingType = listingType;
+        if (city) query['address.city'] = new RegExp(city, 'i');
+        if (state) query['address.state'] = new RegExp(state, 'i');
+        if (bedrooms) query['sepecifiaction.bedrooms'] = { $gte: Number(bedrooms) };
+        if (bathrooms) query['sepecifiaction.bathrooms'] = { $gte: Number(bathrooms) };
+        if (furnished) query['specifications.furnished'] = furnished;
+
+        //Price range
+        if (minPrice || maxPrice) {
+            query.price = {};
+            if (minPrice) query.price.$gte = Number(minPrice);
+            if (maxPrice) query.price.$gte = Number(maxPrice);
+        }
+
+        //sorting
+        const sortOptions = {};
+        sortOptions[sortBy] = order === 'asc' ? 1 : -1;
+
+        // Pagination
+        const skip = (page - 1) * limit;
+
+        const properties = await Property.find(query)
+            .sort(sortOptions)
+            .limit(Number(limit))
+            .skip(skip)
+            .populate('owner.userId', 'fullName email')
+            .select('-__v');
+
+        const total = await Property.countDocuments(query);
+
+        res.status(200).json({
+            success: true,
+            properties,
+            pagination: {
+                currentPage: Number(page),
+                totalPages: Math.ceil(total / limit),
+                totalProperties: total,
+                hasMore: skip + properties.length < total
+            }
+        });
+
+
     } catch (error) {
-        
+        console.log('Error in getAllProperties:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+
     }
 }
 
 //Get Property by id
-export const getPropertyById =async (req,res) =>{
+export const getPropertyById = async (req, res) => {
     try {
-        
+
     } catch (error) {
-        
+
     }
 }
 
 //Update Property
-export const updateProperty =async(req, res) =>{
+export const updateProperty = async (req, res) => {
     try {
-        
+
     } catch (error) {
-        
+
     }
 }
 
 //Delete Property
-export const deleteProperty =async(req,res) =>{
+export const deleteProperty = async (req, res) => {
     try {
-        
+
     } catch (error) {
-        
+
     }
 }
 
 //Get Users Properties
-export const getUserProperties = async (req,res) =>{
+export const getUserProperties = async (req, res) => {
     try {
-        
+
     } catch (error) {
-        
+
     }
 }
