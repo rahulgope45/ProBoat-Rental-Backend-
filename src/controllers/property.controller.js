@@ -288,8 +288,21 @@ export const deleteProperty = async (req, res) => {
 //Get Users Properties
 export const getUserProperties = async (req, res) => {
     try {
+        const properties = await Property.find({ 'owner.userId': req.user._id })
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: properties.length,
+            properties
+        })
 
     } catch (error) {
+        console.log('Error in getUserProperties:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
 
+        })
     }
 }
