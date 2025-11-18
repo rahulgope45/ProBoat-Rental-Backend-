@@ -11,7 +11,7 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-export const uplaod = multer({
+export const upload = multer({
     storage,
     fileFilter,
     limits:{
