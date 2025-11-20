@@ -12,8 +12,9 @@ router.get('/:id',getPropertyById);
 
 //protectedRoutes
 router.post('/',protectRoute,createProperty);
+router.get('/user/my-properties',protectRoute,getUserProperties);
 router.put('/:id',protectRoute,updateProperty);
 router.delete('/:id',protectRoute,deleteProperty);
-router.get('/user/my-properties',protectRoute,getUserProperties);
+
 
 export default router;

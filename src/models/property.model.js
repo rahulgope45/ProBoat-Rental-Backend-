@@ -30,15 +30,15 @@ const propertySchema = new mongoose.Schema(
         },
 
         price: {
-            type: String,
+            type: Number,
             required:true,
             default: 'INR'
         },
 
         address: {
-            type: String,
             
-            area: String,
+            street: {type: String},
+            area: {type: String},
             city: {type: String, required:true},
             state: {type: String, required:true},
             country: {type: String, required:true},
@@ -65,27 +65,28 @@ const propertySchema = new mongoose.Schema(
             area: Number,
             furnished: {
                 type: String,
-                enum: [ 'full-furnished', 'semi-furnished', 'unfurnished']
+                enum: [ 'fully-furnished', 'semi-furnished', 'unfurnished']
             },
             parking: Number,
             floor: Number,
             totalFloors: Number
         },
-        amenities:{
+        amenities:[{
             type: String,
             enum: [
                 'gym', 'pool', 'garden', 'security', 'lift', 'power-backup','internet',
                 'air-condioning','heating','balcony', 'terrace'
             ]
-        },
+        }],
         //images
         images: [{
             url: {
                 type:String,
                 required:true
             },
-            caption: {
-                type:String
+            publicId: {
+                type:String,
+                required:true
             },
             isPrimary: {
                 type: Boolean,
