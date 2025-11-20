@@ -96,6 +96,8 @@ export const getAllProperties = async (req, res) => {
             search
         } = req.query;
 
+        const query = {status: 'active'};
+
 
         //Query
         if (propertyType) query.propertyType = propertyType;
@@ -172,7 +174,7 @@ export const getPropertyById = async (req, res) => {
         await property.save()
 
         res.status(200).json({
-            success: false,
+            success: true,
             property
         })
 
@@ -225,7 +227,7 @@ export const updateProperty = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'property updated successfully',
-            property: updateProperty
+            property: updatedProperty
         });
 
     } catch (error) {
@@ -264,6 +266,8 @@ export const deleteProperty = async (req, res) => {
             cloudinary.uploader.destroy(img.publicId)
         );
         await Promise.all(deletePromises);
+
+        await Property.findByIdAndDelete(id);
 
         //delete Property
         await Review.deleteMany({

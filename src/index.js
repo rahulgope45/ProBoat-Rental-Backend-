@@ -37,7 +37,7 @@ app.use("/api/auth",authRoutes);
 
 //Connecting Property routes
 app.use('/api/properties',propertyRoute);
-app.use('api/upload', uploadRoute);
+app.use('/api/upload', uploadRoute);
 
 
 
