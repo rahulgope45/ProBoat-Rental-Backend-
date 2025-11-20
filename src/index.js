@@ -11,7 +11,7 @@ const app = express();
 
 //Frontend
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173" , "https://prop-bot-rental.vercel.app"],
     credentials: true
 }));
 
