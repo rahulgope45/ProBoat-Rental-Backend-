@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "./user.model";
+import User from "./user.model.js";
 
 //Property schema
 
@@ -81,11 +81,11 @@ const propertySchema = new mongoose.Schema(
         //images
         images: [{
             url: {
-                typr:String,
+                type:String,
                 required:true
             },
             caption: {
-                String
+                type:String
             },
             isPrimary: {
                 type: Boolean,
@@ -138,7 +138,7 @@ const propertySchema = new mongoose.Schema(
         },
         lastUpdated:{
             type: Date,
-            default: Date,now
+            default: Date.now
         }
         
 
