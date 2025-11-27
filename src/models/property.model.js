@@ -41,7 +41,7 @@ const propertySchema = new mongoose.Schema(
             area: {type: String},
             city: {type: String, required:true},
             state: {type: String, required:true},
-            country: {type: String, required:true},
+            country: {type: String, default:"India"},
             zipCode: String
 
         },

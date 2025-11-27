@@ -14,13 +14,16 @@ export const createProperty = async (req, res) => {
             listingType,
             price,
             address,
-            location,
+            location,//
             specifications,
             amenities,
             images,
             owner
 
         } = req.body;
+        console.log('=== CREATE PROPERTY REQUEST ===');
+        console.log('User:', req.user._id);
+        console.log('Body:', JSON.stringify(req.body, null, 2));
 
         //Validation
         if (!title || !description || !propertyType || !listingType || !price) {
