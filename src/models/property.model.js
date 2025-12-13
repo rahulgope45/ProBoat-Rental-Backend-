@@ -32,7 +32,7 @@ const propertySchema = new mongoose.Schema(
         price: {
             type: Number,
             required:true,
-            default: 'INR'
+            // default: 'INR'
         },
 
         address: {
@@ -75,7 +75,7 @@ const propertySchema = new mongoose.Schema(
             type: String,
             enum: [
                 'gym', 'pool', 'garden', 'security', 'lift', 'power-backup','internet',
-                'air-condioning','heating','balcony', 'terrace'
+                'air-conditioning','heating','balcony', 'terrace'
             ]
         }],
         //images
@@ -112,7 +112,7 @@ const propertySchema = new mongoose.Schema(
             }
         },
 
-        rattings:{
+        ratings:{
             average:{
                 type: Number,
                 default: 0,
@@ -152,6 +152,7 @@ propertySchema.index({title: 'text',description:'text'});
 propertySchema.index({'address.city':1,'address.state':1});
 propertySchema.index({price: 1});
 propertySchema.index({propertyType:1, listingType:1})
+
 
 const Property = mongoose.model("properties", propertySchema);
 export default Property;

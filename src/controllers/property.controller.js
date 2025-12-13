@@ -1,6 +1,7 @@
 import Property from "../models/property.model.js";
 import Review from "../models/review.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import mongoose from "mongoose";
 
 
 //Controller of Listing property
@@ -99,7 +100,7 @@ export const getAllProperties = async (req, res) => {
             search
         } = req.query;
 
-        const query = {status: 'active'};
+        const query = { status: 'active' };
 
 
         //Query
@@ -162,15 +163,30 @@ export const getPropertyById = async (req, res) => {
     try {
         const { id } = req.params;
 
+        console.log('=== GET PROPERTY BY ID ===');
+        console.log('ID:', id);
+        console.log('Is valid ObjectId?', mongoose.Types.ObjectId.isValid(id));
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.log(' Invalid ID format');
+            return res.status(400).json({ 
+                success: false,
+                message: "Invalid property ID"
+             });
+        }
+
         const property = await Property.findById(id)
             .populate('owner.userId', 'fullName email');
 
         if (!property) {
+            console.log(' Property not found');
             return res.status(404).json({
                 success: false,
                 message: 'Property not found'
             });
         }
+
+        console.log('✅ Property found:', property._id);
 
         //increment views
         property.views += 1
