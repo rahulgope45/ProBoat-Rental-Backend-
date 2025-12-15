@@ -98,6 +98,12 @@ export const logout = async (req,res)=>{
     
 }
 
+//to get username and email
+export const  getMe = async (req,res) => {
+    const user =await User.findById(req.user._id).select("fullName email");
+    res.json({success: true,user});
+}
+
 export const checkAuth = async (req,res)=>{
     try {
         res.status(200).json({
