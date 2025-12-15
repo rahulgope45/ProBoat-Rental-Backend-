@@ -239,7 +239,12 @@ export const updateProperty = async (req, res) => {
 
         const updatedProperty = await Property.findByIdAndUpdate(
             id,
-            { ...req.body },
+            { ...req.body,
+                owner:{
+                    ...req.body.owner,
+                    userId: req.user._id
+                }
+             },
             { new: true, runValidators: true }
         );
 
