@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.route.js"
 import cors from 'cors';
 import propertyRoute from "./routes/property.routes.js";
 import uploadRoute from "./routes/upload.route.js";
+import reviewRoutes from './routes/review.routes.js'
 
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use("/api/auth",authRoutes);
 //Connecting Property routes
 app.use('/api/properties',propertyRoute);
 app.use('/api/upload', uploadRoute);
+app.use('/api/reviews', reviewRoutes);
 
 
 
