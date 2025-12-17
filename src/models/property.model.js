@@ -154,5 +154,5 @@ propertySchema.index({price: 1});
 propertySchema.index({propertyType:1, listingType:1})
 
 
-const Property = mongoose.model("properties", propertySchema);
+const Property = mongoose.model("Property", propertySchema);
 export default Property;

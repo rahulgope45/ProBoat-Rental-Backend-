@@ -7,6 +7,7 @@ import cors from 'cors';
 import propertyRoute from "./routes/property.routes.js";
 import uploadRoute from "./routes/upload.route.js";
 import reviewRoutes from './routes/review.routes.js'
+import inquiryRoutes from './routes/inquiry.routes.js'
 
 
 dotenv.config();
@@ -40,6 +41,7 @@ app.use("/api/auth",authRoutes);
 app.use('/api/properties',propertyRoute);
 app.use('/api/upload', uploadRoute);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/inquiries',inquiryRoutes);
 
 
 
