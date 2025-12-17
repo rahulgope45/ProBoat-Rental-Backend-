@@ -24,7 +24,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
+
 
 
 //Test Route 
