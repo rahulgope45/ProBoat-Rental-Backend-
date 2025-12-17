@@ -1,6 +1,6 @@
 import express  from 'express';
 
-import { createProperty, deleteProperty, updateProperty,getAllProperties,getPropertyById,getUserProperties } from '../controllers/property.controller.js';
+import { createProperty, deleteProperty, updateProperty,getAllProperties,getPropertyById,getUserProperties,getRandomProperties } from '../controllers/property.controller.js';
 import { protectRoute } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -8,6 +8,8 @@ const router = express.Router();
 //Public Routes
 router.get('/',getAllProperties);
 router.get('/user/my-properties',protectRoute,getUserProperties);
+router.get('/random', getRandomProperties);
+
 router.get('/:id',getPropertyById);
 //protectedRoutes
 router.post('/',protectRoute,createProperty);

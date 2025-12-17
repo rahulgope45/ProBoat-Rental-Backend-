@@ -334,3 +334,27 @@ export const getUserProperties = async (req, res) => {
         })
     }
 }
+
+export const getRandomProperties = async (req, res) => {
+  try {
+    const { listingType, limit = 2 } = req.query;
+
+    const matchStage = {};
+    if (listingType) {
+      matchStage.listingType = listingType; // rent / sale
+    }
+
+    const properties = await Property.aggregate([
+      { $match: matchStage },
+      { $sample: { size: Number(limit) } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      properties
+    });
+  } catch (error) {
+    console.log('Error in getRandomProperties:', error.message);
+    res.status(500).json({ success: false });
+  }
+};
