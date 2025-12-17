@@ -92,7 +92,7 @@ app.use((req, res) => {
     });
 });
 
-// ✅ For Vercel serverless, don't use app.listen in production
+// ✅ For Vercel serverless, don't use app.listen in production app should be working
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
