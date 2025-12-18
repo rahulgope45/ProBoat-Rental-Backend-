@@ -8,8 +8,8 @@ export const genrateToken = (userId, res)=>{
     res.cookie("jwt",token,{
         maxAge: 7 * 24 * 60 * 60 * 1000, //Ms
         httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV !== "production",
+        sameSite: "none",
+        secure: true,
     });
     return token;
 }
